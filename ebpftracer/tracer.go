@@ -156,6 +156,7 @@ type perfMap struct {
 }
 
 func (t *Tracer) ebpf(ch chan<- Event) error {
+	return nil
 	if _, ok := ebpfProg[runtime.GOARCH]; !ok {
 		return fmt.Errorf("unsupported architecture: %s", runtime.GOARCH)
 	}
