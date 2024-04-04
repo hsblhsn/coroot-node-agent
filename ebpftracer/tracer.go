@@ -20,7 +20,6 @@ import (
 	"golang.org/x/mod/semver"
 	"golang.org/x/sys/unix"
 	"inet.af/netaddr"
-	"k8s.io/klog/v2"
 )
 
 const MaxPayloadSize = 1024
@@ -238,11 +237,13 @@ func (t *Tracer) ebpf(ch chan<- Event) error {
 			}
 			l, err = link.Kprobe(programSpec.AttachTo, program, nil)
 		}
-		if err != nil {
-			t.Close()
-			return fmt.Errorf("failed to link program: %w", err)
+		if err == nil {
+			t.links = append(t.links, l)
 		}
-		t.links = append(t.links, l)
+		//if err != nil {
+		//	t.Close()
+		//	return fmt.Errorf("failed to link program: %w", err)
+		//}
 	}
 
 	return nil
